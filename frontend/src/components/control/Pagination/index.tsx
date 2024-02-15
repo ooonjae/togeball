@@ -35,7 +35,7 @@ const Pagination = ( props ) => {
 
     setChatContent( chats?.content )
     if( chatContent &&  team !== 11 ){
-      setChatContent( chats?.content )
+      // setChatContent( chats?.content )
       setChatContent( chats?.content?.filter(( chat )=> chat?.cheeringClub?.id === team ))
       setCurrentPage( 1 )
     }

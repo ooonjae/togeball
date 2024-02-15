@@ -19,14 +19,28 @@ const SettingWrapper = styled.div`
 `
 
 const MatchBtn = styled.button`
-    width: 300px;
+    width: 100%;
     height: 36px;
-    background-color: #DEDCEE; 
-    border-radius: 20px;
-    border: 1px lightgray solid;
+    background-color: transparent;
+    border: none;
     font-weight: bold;
     font-size: 16px;
     cursor: pointer;
+`
+
+const MatchButtonWrapper = styled.div`
+  display: flex;
+  width: 300px;
+  justify-contents: Center;
+  border-radius: 20px;
+  background-color: #DEDCEE; 
+`
+
+const UndoButtonWrapper = styled.button`
+  background-color: transparent;
+  font-size: 20px;
+  border: none;
+  cursor: pointer;
 `
 
 const ModalBackground = styled.div`
@@ -74,6 +88,10 @@ const RecruitList = () => {
     else navigator( '/recruit/post' )
   }
 
+  const resetMatch = () =>{
+    setChatContent( chats?.content )
+  }
+
   const html = document.querySelector( 'html' )
 
   const openModal = () => {
@@ -101,21 +119,28 @@ const RecruitList = () => {
       <MainLayout title='직접 방 선택'>  
         <HomeLayout>
           <SettingWrapper>
-          <MatchBtn onClick={ openModal }>
-        {
-          match.homeClubName ? 
-          `${ match.homeClubName } VS ${ match.awayClubName } ${ match.datetime.substring(0,10) + ' ' + match.datetime.substring(11,16)}`
-          :'경기를 선택하세요' 
-        }
-        </MatchBtn>
-        { 
-          isModalOpened 
-          && createPortal(
-            <ModalPortal onClose={ closeModal }>
-              <Modal><WeekCalendar/></Modal>
-            </ModalPortal>,
-            document.body )
-        }
+            <MatchButtonWrapper>
+              <MatchBtn onClick={ openModal }>
+                {
+                  match.homeClubName ? 
+                  `${ match.homeClubName } VS ${ match.awayClubName } ${ match.datetime.substring( 0,10 ) + ' ' + match.datetime.substring( 11,16 )}`
+                  :'경기를 선택하세요' 
+                }
+              </MatchBtn>
+              { match.homeClubName && 
+                <UndoButtonWrapper onClick={ resetMatch }>
+                  &nbsp;↺&nbsp;
+                </UndoButtonWrapper>
+              }
+            </MatchButtonWrapper>
+            { 
+              isModalOpened 
+              && createPortal(
+                <ModalPortal onClose={ closeModal }>
+                  <Modal><WeekCalendar/></Modal>
+                </ModalPortal>,
+                document.body )
+            }
             <Select 
               dataSource={ teams } 
               placeholder='응원팀' 
