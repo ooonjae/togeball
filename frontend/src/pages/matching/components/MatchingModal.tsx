@@ -1,12 +1,9 @@
-import React from 'react'
 import styled from 'styled-components'
 import  MatchingProfile  from './MatchingProfile'
 import { Button, Title } from 'src/components'
 import { useNavigate } from 'react-router-dom'
 import { useMutation } from 'react-query'
 import { partiChat } from 'src/api'
-
-
 
 const ModalInfoWrapper = styled.div`
   display: flex;
@@ -51,7 +48,7 @@ const MatchingModal = ( props ) => {
 
   const partiMutation = useMutation( partiChat, {
     onSuccess: () => {
-      navigator(`/matchChat/${ chatroomId }`)
+      navigator(`/matchChat/${ chatroomId }`, { state: title });
     }
   })
 
@@ -59,20 +56,17 @@ const MatchingModal = ( props ) => {
        onClose()
   }
 
- 
   const navigator = useNavigate()
 
   const onClickHandler = () => {
     partiMutation.mutateAsync({ chatRoomId : chatroomId })
   }
-  
 
   return (
     <ModalOverlay>
       <ModalContent onClick={(e) => e.stopPropagation()}>
         <CloseButton onClick={ handleModalClose }>닫기</CloseButton>
         <ModalInfoWrapper >
-
           <p style={{ fontSize: '30px', color: '#7D74B4' , fontWeight:'bolder' }}>{ title }</p>
           <div style={{ textAlign: 'center'}}>
                 { participants?.map(( participant ) => (
@@ -82,7 +76,7 @@ const MatchingModal = ( props ) => {
                         gender={ participant.gender }
                         age={ participant.birthdate }
                         profileImg={ participant.profileImage }
-                        tags={ participant.tags?.map( tag => tag.content )} // 태그 배열에서 content 속성 추출
+                        tags={ participant.tags?.map( tag => tag.content )}
                         myteam={ participant.clubLogo }
                       />
                     ))}

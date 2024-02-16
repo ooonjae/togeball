@@ -1,12 +1,12 @@
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom'
 import { getMyInfo } from 'src/api'
-import { TagList } from './index';
-import lufi from 'src/asset/images/lufi.jpg'
+import { TagList } from './index'
 import Logo from 'src/asset/images/Logo.jpg'
 import barcode from 'src/asset/images/barcode.jpg'
-import { useQuery } from 'react-query';
-import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query'
+import { useEffect, useState } from 'react'
+import { Title } from 'src/components'
 
 const TicketWrapper = styled.div`
     display: flex;
@@ -58,7 +58,8 @@ const MySelfWrapper = styled.div`
     flex-direction: column;
     width: 70%;
     flexWrap: wrap;
-    margin-top: 30px;
+    margin-top: 20px;
+    gap: 5px;
 `
 
 const IndexWrapper = styled.p`
@@ -69,7 +70,7 @@ const IndexWrapper = styled.p`
     
 const ValueWrapper = styled.span`
     color: black;
-    padding: 5px 10px 5px 20px;
+    padding-top : 20px;
     font-weight: bolder;
     position: relative;
     z-index: 999;
@@ -116,17 +117,18 @@ const Ticket = ( () => {
                 <MyinfoWrapper>
                     <div style={{ width: '65%', height: '100%', display: 'flex', flexWrap: 'wrap' }}>
                         <div style={{ width:'30%'}}>
-                            <PictureWrapper src={( user?.profileImage===null || user?.profileImage==='' )? lufi : user?.profileImage } />
+                            <PictureWrapper src={( user?.profileImage===null || user?.profileImage==='' )? Logo : user?.profileImage } />
                         </div>
                         <MySelfWrapper>
-                            <IndexWrapper>이메일:  
+                            <IndexWrapper><Title type='small'>이메일:</Title>  
                                 <ValueWrapper>{ user?.email }</ValueWrapper>
                             </IndexWrapper>
                             <div style={{ display: 'flex', gap: '40px' }}>
-                                <IndexWrapper>응원팀:  
+                                <IndexWrapper>
+                                    <Title type='small'>응원팀:  </Title>
                                     <ValueWrapper>{ ( user?.myTeam===0 ) ? '미정' : user?.myTeam }</ValueWrapper>
                                 </IndexWrapper>
-                                <IndexWrapper>닉네임:  
+                                <IndexWrapper><Title type='small'>닉네임:  </Title>
                                     <ValueWrapper>{ user?.nickName }</ValueWrapper>
                                 </IndexWrapper>
                             </div>

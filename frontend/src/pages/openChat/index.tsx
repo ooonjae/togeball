@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
-import { useParams, useLocation, useNavigate } from 'react-router-dom'
+import { useParams, useLocation, useNavigate, } from 'react-router-dom'
 import { ChatMessage, Participants } from './components'
 import { Button, InputBox, LeftIcon, MainLayout } from 'src/components'
 import { createClient } from './util/chat'
 import useStore from 'src/store'
 import styled from 'styled-components'
-import { getChat, getOpenChatMessages, getMyInfo, getParticipants } from 'src/api'
+import { getChat, getOpenChatMessages, getMyInfo, getParticipants, exitChat } from 'src/api'
 import { useQuery, useMutation } from 'react-query'
 import { formatDate } from './util'
 import postChatImage  from './api/postChatImage'
@@ -76,8 +76,7 @@ const OpenChat = () => {
   const scriptEndRef = useRef< HTMLDivElement >( null ) 
   const { session } = useStore()
   const { data: itsme } = useQuery([ 'itsme' ], () => getMyInfo())
-  const { data: participants } = useQuery([ 'participants', { id : chatroomId }], () => getParticipants( { id : chatroomId }))
-  const { data : chatInfo } = useQuery([ 'chatInfo', { id : chatroomId }], () => getChat( { id : chatroomId }))
+  const { data: participants, refetch } = useQuery([ 'participants', { id : chatroomId }], () => getParticipants( { id : chatroomId }))
   
   const stompClient = useRef( null )
 
@@ -86,14 +85,13 @@ const OpenChat = () => {
 
   const location = useLocation()
   const games = location.state
-  
-  console.log( games )
 
   useEffect(() => {
+    refetch()
     const onConnect = async() => {
       stompClient.current?.subscribe(`/topic/room.${ chatroomId }`, ( message ) => {
         const newMessage = JSON.parse( message.body )
-
+        refetch()
         if( newMessage?.type === 'NOTICE' ) return
 
         setMessages(( prevMessages ) => [
@@ -152,6 +150,12 @@ const OpenChat = () => {
     connectToStomp()
 
     return () => {
+      
+      const exitChat = async() => {
+        await deleteAxios(`/api/chatrooms/${chatroomId}/participants`)
+      }
+      exitChat()
+
       const data = {
         roomId : Number(chatroomId),
         data :{
@@ -168,7 +172,6 @@ const OpenChat = () => {
     if ( !e.target.files || e.target.files.length ===0 ) return
 
     const file = e.target.files[0]
-    console.log(itsme?.nickname)
 
     try {
       const param = {
@@ -212,18 +215,9 @@ const OpenChat = () => {
     
   }
 
-  const exitChat = async() => {
-    const confirmed = window.confirm('정말로 나가시겠습니까?')
-
-    if (confirmed) {
-      await deleteAxios(`/api/chatrooms/${chatroomId}/participants`)
-      navigator('/')
-    }
-   }
-
-
   return (
     <MainLayout>
+      
         <ChatPageWrapper>
           <Participants list = { participants } game = { games }/>
           <ChatWrapper>
@@ -256,9 +250,6 @@ const OpenChat = () => {
                     전송
                   </Button>
                 </InputBox>
-                <Button onClick={() => exitChat()}>
-                    나가기
-                </Button>
             </InputBoxWrapper>
             
           </ChatWrapper>

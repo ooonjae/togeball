@@ -19,7 +19,7 @@ const IconWrapper = styled.div`
     box-sizing: border-box;
     display: flex;
     flex-direction: row;
-    gap: 10px;
+    margin-top: -20px;    
   `
 const MsgWrapper = styled.p`
   color: red;
@@ -77,6 +77,11 @@ const SignUp = () => {
       isCheck( e.target.value )
     }
   
+    const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code`
+    const handleKakao = ()=>{
+        window.location.href = kakaoURL
+    }
+
     return (
       <MainLayout>
         <SignLayout>
@@ -91,6 +96,7 @@ const SignUp = () => {
           <InputBox 
             title= '비밀번호' 
             placeholder= '비밀번호를 입력해주세요.'
+            type= 'password'
             value={ password }
             onChange={(e) => { updatePassword(e) }}
           />
@@ -105,7 +111,7 @@ const SignUp = () => {
           회원가입
         </SignButton>
         <Title type='small'>SNS 회원가입</Title>
-        <IconWrapper><NaverIcon /><KakaoIcon /></IconWrapper>
+        <IconWrapper><KakaoIcon onClick={ handleKakao }/></IconWrapper>
        </SignLayout>
       </MainLayout>
     )
