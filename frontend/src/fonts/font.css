@@ -1,0 +1,23 @@
+@font-face{
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: 100;
+    src: url("./NotoSansKR-VariableFont_wght.ttf") format("woff")
+}
+
+@font-face{
+    font-family: 'SingleDay';
+    font-style: normal;
+    font-weight: 100;
+    src: url("./SingleDay-Regular.ttf") format("woff")
+}
+
+@font-face {
+    font-family: 'Ibm-Regular';
+    src: url("./IBMPlexSansKR-Regular.ttf") format("woff")
+}
+
+@font-face {
+    font-family: 'Ibm-Medium';
+    src: url("./IBMPlexSansKR-Medium.ttf") format('woff')
+}
