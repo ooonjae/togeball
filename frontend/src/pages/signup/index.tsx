@@ -102,6 +102,7 @@ const SignUp = () => {
           />
           <InputBox 
             title= '비밀번호 확인' 
+            type= 'password'
             placeholder= '동일한 비밀번호를 입력해주세요.' 
             onChange={(e) => { isCheck( e.target.value )}}
           />
